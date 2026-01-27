@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react' // React Hooks
 import Trash from '/images/Trash.svg'
 import api from '../../services/api' 
 
@@ -11,41 +11,26 @@ function Home() {
     const inputPass = useRef()
 
     async function getUsers() {
-        try {
-            const { data } = await api.get('/users')
-            setUsers(data)
-        } catch (error) {
-            console.error("Erro ao buscar usuários:", error)
-        }
+            const usersFromApi = await api.get('/users')
+
+            setUsers(usersFromApi.data)
     }
 
     async function createUsers() {
-        try {
-            await api.post('/users', {
-                name: inputName.current.value,
-                email: inputEmail.current.value,
-                age: parseInt(inputAge.current.value),
-                password: inputPass.current.value
-            })
-            
-            inputName.current.value = ''
-            inputEmail.current.value = ''
-            inputAge.current.value = ''
-            inputPass.current.value = ''
+        await api.post('/users', {
+            name: inputName.current.value,
+            email: inputEmail.current.value,
+            age: parseInt(inputAge.current.value),
+            password: inputPass.current.value
+        })
 
-            getUsers()
-        } catch (error) {
-            console.error("Erro ao criar usuário:", error)
-        }
+        getUsers()
     }
 
     async function deleteUsers(id) {
-        try {
-            await api.delete(`/users/${id}`)
-            getUsers()
-        } catch (error) {
-            console.error("Erro ao deletar usuário:", error)
-        }
+        await api.delete(`/users/${id}`)
+
+        getUsers()
     }
 
     useEffect(() => {
